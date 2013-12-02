@@ -1,0 +1,112 @@
+body {
+  font: 10px sans-serif;
+}
+
+svg {
+  font: 10px sans-serif;
+}
+
+#kwhsel {
+  fill:#666;
+}
+
+path {
+  pointer-events: none;
+}
+
+.rotuloy {
+  writing-mode: tb; 
+  glyph-orientation-vertical: 0;  
+}
+
+.bar,path {
+  fill: steelblue;
+}
+
+.etibarra {
+  font-size: 75%;
+}
+
+.resize path{
+  fill: black;
+}
+
+.zonanocturna,.zonadiurna {
+  fill-opacity: 0.15;
+  pointer-events: none;
+}
+
+.zonanocturna {
+  fill: green;
+}
+
+.zonadiurna {
+  fill: red;
+}
+
+.puntomin {
+  stroke: black;
+  fill: green;  
+}
+
+.lineacur {
+  stroke: black;
+  stroke-width: 1px;
+  stroke-dasharray: 2,2;
+  pointer-events: none;
+}
+
+
+.textomin {
+  fill: green;
+}
+
+.lineamin {
+  stroke: green;
+  stroke-width: 1px;
+  stroke-dasharray: 2,2;
+}
+
+.puntomax {
+  stroke: black;
+  fill: red;  
+}
+
+.textomax {
+  fill: red;
+}
+
+.lineamax {
+  stroke: red;
+  stroke-width: 1px;
+  stroke-dasharray: 2,2;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+/* Ticks de días */
+.axis2 path,
+.axis2 .tick line {
+  fill: none;
+  stroke: #999;
+  stroke-dasharray: 2,2;
+  shape-rendering: crispEdges;
+}
+.axis2 path {
+  display:none;
+}
+.axis2 text {
+  font-weight: bold;
+}
+
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .525;
+  shape-rendering: crispEdges;
+}
