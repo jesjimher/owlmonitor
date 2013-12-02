@@ -1,9 +1,3 @@
-//TODO: AJUSTAR EJE Y EN FUNCIÓN DEL NIVEL DE ZOOM
-//TODO: Franjas TDH reales
-//TODO: Franjas que muestren horas de luz (http://www.fomento.es/MFOM/LANG_CASTELLANO/DIRECCIONES_GENERALES/INSTITUTO_GEOGRAFICO/Astronomia/publico/efemerides/sol-2013.htm)
-//TODO: Redibujar el gráfico cuando cambia de tamaño la pestaña. 
-//TODO: Checkbox para alternar entre kwh y eur
-
 // Precios por kwh en TUR, según BOE 235 de 1-oct 2013
 var eurporkwh=0.130485*1.21;
 // Con discriminación horaria
@@ -484,7 +478,6 @@ function dibujarActual() {
 }
 
 // Dibuja el pico de consumo máximo de la vista actual
-//TODO: Dibujar mínimo
 function dibujarMax(mostrar) {
   
   // Borrar existentes
@@ -544,7 +537,6 @@ function dibujarMax(mostrar) {
 
 // Dibuja las franjas de colores de discriminación horaria
 // 
-//TODO: Poner un texto con la suma de los kWh en esa franja
 function dibujarZonasHorarias(mostrar) {
   // Funcioncilla para calcular si es zona valle o punta
 /*  zonavalle=function(d) {
