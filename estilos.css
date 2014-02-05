@@ -6,6 +6,52 @@ svg {
   font: 10px sans-serif;
 }
 
+input[type=checkbox], input[type=radio] {
+  vertical-align: middle;
+  position: relative;
+  bottom: 1px;
+}
+input[type=radio] {
+  bottom: 2px;
+}
+
+table,tr {
+/*  border: 1px #000 solid;*/
+  text-align: center;
+}
+
+td {
+  text-align: right;
+  padding-left: 1em;
+}
+
+th.supertit {
+  text-align: center;
+  color:#fff;
+  background-color:black;
+}
+
+th.titizq {
+  text-align: left;
+}
+
+
+.caja {
+  height: 8.5em;
+  float:left;
+  border: 1px #999 solid;
+  border-radius: 5px;
+  padding: 1em;
+  margin: 0.5em;  
+}
+
+.caja h2 {
+  font: 10px sans-serif;
+  font-weight: bold;
+  margin-top:0;
+  text-transform: uppercase;
+}
+
 #kwhsel {
   fill:#666;
 }

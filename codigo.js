@@ -110,7 +110,7 @@ var datos;
 // Consumo diario en kWh
 var consdiario=[];
 
-var tamgrande=0.6*window.innerHeight;
+var tamgrande=0.5*window.innerHeight;
 var margin = {top: 10, right: 10, bottom: 40, left: 40},
     margin2 = {top: 500, right: 10, bottom: 20, left: 40},
     width = window.innerWidth - margin.left - margin.right - 10,

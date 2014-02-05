@@ -9,11 +9,31 @@
 		<script src="simplify.js" charset="utf-8" type="text/javascript" ></script>
 		<script src="moment-with-langs.js" charset="utf-8" type="text/javascript" ></script>
 		<div id="estadisticas">
-		  <input id="mostrarmax" type="checkbox" checked/>Mostrar consumo máximo<br>
-		  Zonas a mostrar: 
-		  <input id="ninguna" type="radio" name="zonas" checked/>Ninguna
-		  <input id="TDH" type="radio" name="zonas"/>Franjas TDH
-		  <input id="horasluz" type="radio" name="zonas"/>Horas de luz
+		  <div class="caja" title="Visualización">
+			 <h2>Opciones</h2>
+			 <input id="mostrarmax" type="checkbox" checked/>Mostrar consumo máximo<br>
+			 Zonas a mostrar: 
+			 <input id="ninguna" type="radio" name="zonas" checked/>Ninguna
+			 <input id="TDH" type="radio" name="zonas"/>Franjas TDH
+			 <input id="horasluz" type="radio" name="zonas"/>Horas de luz
+		  </div>
+		  <div class="caja">
+			 <h2>Estadísticas</h2>
+			 <table>
+				<tr>
+				  <th></th><th class="supertit" colspan="4">kWh</th><th class="supertit" colspan="5">eur</th>
+				</tr>
+				<tr>
+				  <th></th><th>Total</th><th>Punta</th><th>Valle</th><th>% valle</th><th>Total</th><th>Punta</th><th>Valle</th><th>TDH</th><th>Ahorro TDH</th>
+				</tr>
+				<tr>
+				  <th class="titizq">Total</th><td>1.500</td><td>800</td><td>600</td><td>40%</td><td>120 €</td><td>80 €</td><td>20 €</td><td>100 €</td><td>20 €</td>
+				</tr>
+				<tr>
+				  <th class="titizq">Selección</th><td>160</td><td>90</td><td>70</td><td>44%</td><td>40 €</td><td>20 €</td><td>10 €</td><td>30 €</td><td>10 €</td>
+				</tr>
+			 </table>
+		  </div>
 		</div>
 		<div id="graficasup"></div>
 		<div id="graficainf"></div>
