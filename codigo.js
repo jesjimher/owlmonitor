@@ -141,6 +141,8 @@ var customTimeFormat = timeFormat([
 	 // Eje x superior
 //	var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(customTimeFormat),
   //TODO:Formato variable que muestra minutos o no en función del tamaño/zoom
+  //TODO:Formato variable para xAxis2 que oculte días cuando hay muchos meses en pantalla
+  //TODO:Mostrar sábados y domingos de otro color
   var xAxis = d3.svg.axis()
 	 .scale(x)
 	 .orient("bottom")
