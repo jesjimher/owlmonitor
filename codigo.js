@@ -1,8 +1,8 @@
-// Precios por kwh en TUR, según BOE 235 de 1-oct 2013
-var eurporkwh=0.130485*1.21;
+// Precios por kwh en TUR, desde 01/02/2014
+var eurporkwh=0.124107*1.21;
 // Con discriminación horaria
-var eurporkwh_punta=0.158548*1.21;
-var eurporkwh_valle=0.055833*1.21;
+var eurporkwh_punta=0.148832*1.21;
+var eurporkwh_valle=0.057995*1.21;
 
 var mostrarmax=true;
 // Valores posibles: vacío, TDH, HORAS_SOL
