@@ -277,7 +277,7 @@ d3.csv("consumo.csv", function(error, data) {
   ext=[detalle[0].date,detalle[detalle.length-1].date];
   x.domain(ext);
   y.domain([0, 1.2*d3.max(datos.map(function(d) { return d.w; }))]);
-
+  
   // Ejes de la gráfica inferior
   fechamax=new Date(d3.max(cd.map(function(d){return d.date;})).getTime());
   // Añadimos un día más para que se vea la última barra
@@ -424,8 +424,12 @@ d3.csv("consumo.csv", function(error, data) {
   d3.select("input#TDH").property("checked",mostrarZonas=="TDH");
   d3.selectAll("input[name=zonas]").on("change",cambioZonas);
 
+  // Forzar la selección del brush inferior
+  ext=[detalle[0].date,detalle[detalle.length-1].date];
+  brush.extent(ext);
+  d3.select("#graficainf .brush").call(brush);
   
-  
+  recalcularEstadisticas();  
 });
 
 // Aplica las transformaciones manuales que no se pueden hacer con CSS, 
@@ -607,6 +611,31 @@ function dibujarZonasHorarias(mostrar) {
   .attr("class","zona"+(zonaverde?"nocturna":"diurna"));
   
 }
+function recalcularEstadisticas() {
+  // Consultamos primero el estado de la selección
+  exttotal=[datos[0].date,datos[datos.length-1].date];
+  extdet=brushdet.extent();
+  extglb=brush.extent();
+  
+  //TODO: Si hay una franja seleccionada (el extent de brushdet tiene valores diferentes) usarlo
+  extsel=extglb;
+  
+  // El total calcularlo sólo una vez
+  tdtotal=d3.select("td#kwhtotal");
+  if (tdtotal.text()=="") {
+	 kwhtotal=Math.round(calcularkwh(exttotal));
+	 tdtotal.text(kwhtotal);
+	 eurtotal=kwhtotal*eurporkwh;
+	 d3.select("td#eurtotal").text(eurtotal.toFixed(2)+" €");
+  }
+  
+  kwhsel=Math.round(calcularkwh(extsel));
+  d3.select("td#kwhsel").text(kwhsel);
+  eursel=kwhsel*eurporkwh;
+  d3.select("td#eursel").text(eursel.toFixed(2)+" €");
+  
+}
+
 
 // Calcula el consumo en kWh para el intervalo de fechas dado
 function calcularkwh(e) {
@@ -616,11 +645,11 @@ function calcularkwh(e) {
   fin=e[1];
   fin.setSeconds(0,0);
   i=0;
-  while (detalle[i].date.getTime()!=ini.getTime())
+  while (datos[i].date.getTime()!=ini.getTime())
 	 i++;
   kwh=0;
-  while (detalle[i].date.getTime()!=fin.getTime()) {
-	 kwh+=detalle[i].w/60000;
+  while (datos[i].date.getTime()!=fin.getTime()) {
+	 kwh+=datos[i].w/60000;
 	 i++;
   }
   return kwh;
@@ -680,6 +709,8 @@ function brushend() {
   .attr("d", area)
   .attr("id","grafica");
 
+  recalcularEstadisticas();
+  
   // Redibujamos el máximo
   dibujarMax(mostrarmax);
   
