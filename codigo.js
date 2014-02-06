@@ -143,13 +143,25 @@ var customTimeFormat = timeFormat([
   //TODO:Formato variable que muestra minutos o no en función del tamaño/zoom
   //TODO:Formato variable para xAxis2 que oculte días cuando hay muchos meses en pantalla
   //TODO:Mostrar sábados y domingos de otro color
-  var xAxis = d3.svg.axis()
+
+// Mostrar todos los días, o sólo los lunes si todos no caben
+var frmDias=timeFormat([
+  [d3.time.format(""),function() {return true;}],
+  [d3.time.format("%e"),function(d) {return d.getDay()==1;}]							  
+]);
+
+var frmDetalle=timeFormat([
+  [d3.time.format("%H:%M"),function() {return true;}],
+  [d3.time.format("%b %d"),function(d) {return d.getHours()==0;}]
+]);
+
+var xAxis = d3.svg.axis()
 	 .scale(x)
 	 .orient("bottom")
-	 .tickFormat(d3.time.format("%H:%M"))
+	 .tickFormat(frmDetalle)
 	 .ticks(d3.time.hours,1),
     // Eje x inferior
-    xAxis2 = d3.svg.axis().scale(x2).orient("bottom").tickFormat(d3.time.format("%d")).ticks(d3.time.days,1),    
+    xAxis2 = d3.svg.axis().scale(x2).orient("bottom").tickFormat(frmDias).ticks(d3.time.days,1),    
     // Eje y inferior
     yAxis2 = d3.svg.axis().scale(y2).orient("left"),
     // Eje y superior
@@ -648,6 +660,11 @@ function brushend() {
   // Recalculamos los ejes para el nuevo intervalo de fechas
   ext=[detalle[0].date,detalle[detalle.length-1].date];
   x.domain(ext);
+  intrv=(x.domain()[1] - x.domain()[0]);
+  if (intrv<30*86340000)
+	 xAxis.ticks(d3.time.hours,Math.round(intrv / 86340000) );
+  else
+	 xAxis.ticks(d3.time.days,1);
   // Por defecto el eje Y no se ajusta, queda más visual
   //TODO: Añadir un checkbox para seleccionar esto
 //  y.domain([0, 1.2*d3.max(detalle.map(function(d) { return d.w; }))]);
@@ -674,7 +691,7 @@ function brushend() {
 }
 
 // Cuando se ajusta la selección. Se redondea siempre al día
-//TODO: Cada vez que se ajuste a piñón, disparar el evento para redibujar (si por rendimiento va bien)
+// //TODO: Cada vez que se ajuste a piñón, disparar el evento para redibujar (si por rendimiento va bien)
 function brushed() {
   var extent0 = brush.extent(),
   extent1;
