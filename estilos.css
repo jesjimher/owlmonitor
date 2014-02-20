@@ -35,6 +35,24 @@ th.titizq {
   text-align: left;
 }
 
+div#selfich {
+    margin:auto;
+    position:absolute;
+    top:0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+/*    border: 1px solid black;*/
+    width: 50em;
+    height: 5em;
+    text-align: center;
+    vertical-align: middle;
+
+}
+
+div#estadisticas {
+	display: none;
+}
 
 .caja {
   height: 8.5em;
@@ -42,7 +60,7 @@ th.titizq {
   border: 1px #999 solid;
   border-radius: 5px;
   padding: 1em;
-  margin: 0.5em;  
+  margin: 0.5em;
 }
 
 .caja h2 {

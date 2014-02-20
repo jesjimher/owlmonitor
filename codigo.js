@@ -219,10 +219,39 @@ var focus = svgsup.append("g")
 var context = svginf.append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	
+
+// Check for the various File API support.
+if (window.File && window.FileReader && window.FileList && window.Blob) {
+  // Great success! All the File APIs are supported.
+} else {
+  alert('The File APIs are not fully supported in this browser.');
+}
+  
+function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+
+    // files is a FileList of File objects. List some properties.
+    var output = [];
+	 f=files[0];
+	 var reader=new FileReader();
+	 reader.onload=function(e) {
+		var text=reader.result;
+		d3.selectAll("div#selfich").attr("style","display:none");
+		d3.selectAll("div#estadisticas").attr("style","display:yes");
+		conv=function(d) {return {date:parseDate(d.date),w:+d.w}};
+		iniciarGraficas(false,d3.csv.parse(text,conv));
+	 }
+	 reader.readAsText(f);
+}
+
+//d3.selectAll("input#selcsv").on("change",handleFileSelect);
+document.getElementById('selcsv').addEventListener('change', handleFileSelect, false);
+/*
+  
 // Cargar CSV
 d3.csv("consumo.csv")
   .row(function(d) {return {date:parseDate(d.date),w:+d.w}})
-  .get(iniciarGraficas);
+  .get(iniciarGraficas);*/
 
 // Función de callback que se ejecuta cuando los datos estén cargados
 // Inicia y dibuja todas las gráficas
