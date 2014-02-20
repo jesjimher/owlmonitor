@@ -224,13 +224,10 @@ var focus = svgsup.append("g")
 var context = svginf.append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("consumo.csv", function(error, data) {
+d3.csv("consumo.csv")
+	.row(function(d) {return {date:parseDate(d.date),w:+d.w}})
+	.get(function(error, data) {
 
-  data.forEach(function(d) {
-    d.date = parseDate(d.date);
-    d.w = +d.w;
-  });
-  
   datos=data;
   
   // Ordenar por fecha por si las moscas
