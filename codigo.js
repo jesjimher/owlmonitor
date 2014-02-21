@@ -236,8 +236,8 @@ function handleFileSelect(evt) {
 	 var reader=new FileReader();
 	 reader.onload=function(e) {
 		var text=reader.result;
-		d3.selectAll("div#selfich").attr("style","display:none");
-		d3.selectAll("div#estadisticas").attr("style","display:yes");
+		d3.selectAll("div#selfich").style("display","none");
+		d3.selectAll("div#estadisticas").style("display","inline");
 		conv=function(d) {return {date:parseDate(d.date),w:+d.w}};
 		iniciarGraficas(false,d3.csv.parse(text,conv));
 	 }
