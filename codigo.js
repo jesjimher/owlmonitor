@@ -582,7 +582,7 @@ function dibujarZonasHorarias(mostrar) {
   rectx=1;
   fini=x.domain()[0]
   ffin=x.domain()[0];
-  ffin.setHours(zonaverde?10:22);  
+  ffin.setHours(zonaverde?12:22);  
   ffin.setMinutes(0);  
   rectw=x(ffin)-x(fini);
   while ((rectx+rectw)<=x.range()[1]) {

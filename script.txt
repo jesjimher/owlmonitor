@@ -1,2 +1,2 @@
-sqlite3 -header -csv eagleowl.db "select year||'-'||month||'-'||day||' '||hour||':'||min date,60*ch1_kw_avg w from energy_history;" > consumo.csv
+sqlite3 -header -csv ../eagleowl.db "select year||'-'||month||'-'||day||' '||hour||':'||min date,60*ch1_kw_avg w from energy_history;" > consumo.csv
  
