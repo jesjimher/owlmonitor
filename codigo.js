@@ -110,6 +110,10 @@ function updateWindow() {
 var datos;
 // Consumo diario en kWh
 var consdiario=[];
+// Como consdiario, pero en formato D3
+var cd={}
+// Array auxiliar para acelerar búsquedas por fecha
+var lookup={}
 
 var tamgrande=0.5*window.innerHeight;
 var margin = {top: 10, right: 10, bottom: 40, left: 40},
@@ -244,10 +248,12 @@ function handleFileSelect(evt) {
 	 var reader=new FileReader();
 	 reader.onload=function(e) {
 		var text=reader.result;
-		d3.selectAll("div#selfich").style("display","none");
-		d3.selectAll("div#estadisticas").style("display","inline");
 		conv=function(d) {return {date:parseDate(d.date),w:+d.w}};
-		iniciarGraficas(false,d3.csv.parse(text,conv));
+		d3.select("progress").style("display","inline");
+		d3.select("progress").attr("value","0");
+		d3.select("#progress_label").style("display","inline");
+		d3.select("#progress_label").text("Cargando CSV...");
+		setTimeout(function(){datosCargados(false,d3.csv.parse(text,conv));},10);		
 	 }
 	 reader.readAsText(f);
 }
@@ -260,16 +266,19 @@ d3.csv("consumo.csv")
   .row(function(d) {return {date:parseDate(d.date),w:+d.w}})
   .get(iniciarGraficas);*/
 
-// Función de callback que se ejecuta cuando los datos estén cargados
-// Inicia y dibuja todas las gráficas
-function iniciarGraficas(error, data) {
-
-  datos=data;
-  
+function ordenarDatos() {
   // Ordenar por fecha por si las moscas
   datos.sort(function(a,b){return a.date-b.date;});
+  
+  // Actualizar progreso y pasar al siguiente paso
+  d3.select("progress").attr("value","80");
+  d3.select("#progress_label").text("Pregenerando arrays auxiliares...");
+  setTimeout(arraysAuxiliares,10);
+  
+}
 
-  // Crear un array para acelerar las búsquedas por fecha
+function arraysAuxiliares() {
+  // Crear un dict para acelerar las búsquedas por fecha
   lookup={};
   for (var i = 0; i < datos.length; i++) {
     amd=soloFecha(datos[i].date);
@@ -294,8 +303,35 @@ function iniciarGraficas(error, data) {
   }
   // Ordenar por fecha por si las moscas
   cd.sort(function(a,b){return a.date-b.date;});
+
+  // Actualizar progreso y pasar al siguiente paso
+  d3.select("progress").attr("value","90");
+  d3.select("#progress_label").text("Generando gráficas...");
+  setTimeout(iniciarGraficas,10);
+}
+
+
+
+// Función de callback que se ejecuta cuando los datos estén cargados
+// Inicia y dibuja todas las gráficas
+function datosCargados(error, data) {
+
   
-/*  aux=datos.map(function(d){return {x:d.date.getTime(),y:d.w}});
+  d3.select("progress").attr("value","40");
+  d3.select("#progress_label").text("Ordenando...");
+  datos=data;
+  setTimeout(ordenarDatos,10);
+}
+
+// Paso final. Cuando todo está ya calculado, dibujar las gráficas
+function iniciarGraficas() {
+  
+  d3.select("progress").attr("value","100");
+  d3.select("#progress_label").text("Listo");
+  d3.selectAll("div#selfich").style("display","none");
+  d3.selectAll("div#estadisticas").style("display","inline");
+
+  /*  aux=datos.map(function(d){return {x:d.date.getTime(),y:d.w}});
   simpli=simplify(aux,3).map(function(d){return {date:new Date(d.x),w:d.y}});*/
 //  simpli=datos;
 

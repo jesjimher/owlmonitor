@@ -6,6 +6,15 @@ svg {
   font: 10px sans-serif;
 }
 
+progress {
+  width: 400px;
+  display: none;
+}
+
+span#progress_label {
+  display:none;
+}
+
 input[type=checkbox], input[type=radio] {
   vertical-align: middle;
   position: relative;
@@ -13,6 +22,9 @@ input[type=checkbox], input[type=radio] {
 }
 input[type=radio] {
   bottom: 2px;
+}
+input[type=file] {
+  width:15em;
 }
 
 table,tr {
