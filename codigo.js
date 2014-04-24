@@ -121,7 +121,15 @@ var margin = {top: 10, right: 10, bottom: 40, left: 40},
 	 height2=0.2*window.innerHeight;
     margin2.top=550;
 
-var parseDate = d3.time.format("%Y-%m-%d %H:%M").parse;
+//var parseDate = d3.time.format("%Y-%m-%d %H:%M").parse;
+// 2-3 veces más rápido que d3.time.format
+var parseDate=function(s){
+  horafecha=s.split(" ");
+  ymd=horafecha[0].split("-");
+  hms=horafecha[1].split(":");
+    
+  return new Date(ymd[0],+ymd[1]-1,ymd[2],hms[0],hms[1]);  
+};
 
 var x = d3.time.scale().range([0, width]),
     x2 = d3.time.scale().range([0, width]),
@@ -246,9 +254,8 @@ function handleFileSelect(evt) {
 
 //d3.selectAll("input#selcsv").on("change",handleFileSelect);
 document.getElementById('selcsv').addEventListener('change', handleFileSelect, false);
-/*
   
-// Cargar CSV
+/*
 d3.csv("consumo.csv")
   .row(function(d) {return {date:parseDate(d.date),w:+d.w}})
   .get(iniciarGraficas);*/
@@ -261,7 +268,7 @@ function iniciarGraficas(error, data) {
   
   // Ordenar por fecha por si las moscas
   datos.sort(function(a,b){return a.date-b.date;});
-  
+
   // Crear un array para acelerar las búsquedas por fecha
   lookup={};
   for (var i = 0; i < datos.length; i++) {
@@ -566,6 +573,7 @@ function dibujarZonasHorarias(mostrar) {
 		
   }*/
 
+  return;
   // Borrar rectángulos existentes
   focus.selectAll(".zonadiurna").remove();
   focus.selectAll(".zonanocturna").remove();
