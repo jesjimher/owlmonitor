@@ -62,7 +62,7 @@ div#selfich {
 
 }
 
-div#estadisticas {
+div#estadisticas,div#graficasup,div#graficainf {
 	display: none;
 }
 

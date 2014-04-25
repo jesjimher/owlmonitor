@@ -114,6 +114,8 @@ var consdiario=[];
 var cd={}
 // Array auxiliar para acelerar búsquedas por fecha
 var lookup={}
+// Lectura del fichero CSV en bruto, antes de procesar
+var text="";
 
 var tamgrande=0.5*window.innerHeight;
 var margin = {top: 10, right: 10, bottom: 40, left: 40},
@@ -247,13 +249,27 @@ function handleFileSelect(evt) {
 	 f=files[0];
 	 var reader=new FileReader();
 	 reader.onload=function(e) {
-		var text=reader.result;
-		conv=function(d) {return {date:parseDate(d.date),w:+d.w}};
-		d3.select("progress").style("display","inline");
-		d3.select("progress").attr("value","0");
+		text=reader.result;
+		d3.select("#progbar").style("display","inline");
 		d3.select("#progress_label").style("display","inline");
-		d3.select("#progress_label").text("Cargando CSV...");
-		setTimeout(function(){datosCargados(false,d3.csv.parse(text,conv));},10);		
+		
+		// Empezar todo el procesamiento previo, mostrando una barra de progreso
+		t=[
+		  {func:procesarCSV, desc:'Procesando CSVs...'},
+		  {func:ordenarDatos, desc:'Ordenando...'},
+		  {func:arraysAuxiliares, desc:'Pregenerando arrays auxiliares...'},	
+		  {func:iniciarGraficas, desc:'Generando gráficas...'}
+		];  
+		secuenciar("progbar"
+				  ,"progress_label"
+				  ,t
+				  ,function(){
+					d3.select("div#selfich").style("display","none");
+					d3.select("div#estadisticas").style("display","inline");
+					d3.select("div#graficasup").style("display","inline");
+					d3.select("div#graficainf").style("display","inline");
+				  }
+				  );		
 	 }
 	 reader.readAsText(f);
 }
@@ -266,15 +282,47 @@ d3.csv("consumo.csv")
   .row(function(d) {return {date:parseDate(d.date),w:+d.w}})
   .get(iniciarGraficas);*/
 
+
+// Ejecuta una lista de tareas en orden, actualizando la barra de progreso especificada entre paso y paso
+// idprogress: id HTML del elemento <progress>
+// idprogresslabel: id HTML del elemento span con el texto a actualizar
+// tareas: array de parejas función-descripción, en el orden a ejecutar. P. e. [{func: paso1,desc:'Ordenando...'},{func:paso2,desc: 'Generando datos...'}]
+// final: función final a ejecutar cuando esté la cola procesada
+function secuenciar(idprogress,idprogresslabel,tareas,final) {  
+  t=tareas;
+  progress=d3.select("#"+idprogress);
+  progresslabel=d3.select("#"+idprogresslabel);
+  function aux(i) {
+	//alert("tarea "+i);
+	if (aux!=null) 
+	  // Ejecutar tarea
+	  t[i].func();
+	  
+	  // Actualizar progreso y programar el siguiente paso
+	  if ((i+1)<t.length) {
+		progresslabel.text(t[i+1].desc);
+		progress.transition().attr("value",100*(i+1)/t.length);
+		setTimeout(function(){aux(i+1);},200);
+	  }	
+	  else {
+		// Programar la ejecución final para cuando acabe la última transición del último paso
+		progress.transition()
+		  .each("end",final)
+		  .attr("value",100);
+	  }
+  }
+
+  // Arrancar la cola
+  if (t.length>0) {
+	progresslabel.text(t[0].desc);
+	progress.attr("value",0);
+	setTimeout(function(){aux(0);},200);
+  }  
+}
+
 function ordenarDatos() {
   // Ordenar por fecha por si las moscas
-  datos.sort(function(a,b){return a.date-b.date;});
-  
-  // Actualizar progreso y pasar al siguiente paso
-  d3.select("progress").attr("value","80");
-  d3.select("#progress_label").text("Pregenerando arrays auxiliares...");
-  setTimeout(arraysAuxiliares,10);
-  
+  datos.sort(function(a,b){return a.date-b.date;});  
 }
 
 function arraysAuxiliares() {
@@ -303,34 +351,19 @@ function arraysAuxiliares() {
   }
   // Ordenar por fecha por si las moscas
   cd.sort(function(a,b){return a.date-b.date;});
-
-  // Actualizar progreso y pasar al siguiente paso
-  d3.select("progress").attr("value","90");
-  d3.select("#progress_label").text("Generando gráficas...");
-  setTimeout(iniciarGraficas,10);
 }
 
+// Procesa el fichero CSV separándolo en campos y formateando las fechas
+function procesarCSV() {
 
-
-// Función de callback que se ejecuta cuando los datos estén cargados
-// Inicia y dibuja todas las gráficas
-function datosCargados(error, data) {
-
-  
-  d3.select("progress").attr("value","40");
-  d3.select("#progress_label").text("Ordenando...");
-  datos=data;
-  setTimeout(ordenarDatos,10);
+  conv=function(d) {return {date:parseDate(d.date),w:+d.w}};
+  datos=d3.csv.parse(text,conv);
 }
+
 
 // Paso final. Cuando todo está ya calculado, dibujar las gráficas
 function iniciarGraficas() {
   
-  d3.select("progress").attr("value","100");
-  d3.select("#progress_label").text("Listo");
-  d3.selectAll("div#selfich").style("display","none");
-  d3.selectAll("div#estadisticas").style("display","inline");
-
   /*  aux=datos.map(function(d){return {x:d.date.getTime(),y:d.w}});
   simpli=simplify(aux,3).map(function(d){return {date:new Date(d.x),w:d.y}});*/
 //  simpli=datos;
